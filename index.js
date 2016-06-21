@@ -19,41 +19,23 @@ var list = function (options, parent, done) {
                 return;
             }
             var el = $(out);
-            $('.plan .save', el).on('click', function () {
-                $.post('/apis/v/hub/plan', function (data) {
-                    console.log(data);
-                });
+            $('.details', el).on('click', function () {
+                redirect('/apps/' + $(this).parent().data('id'));
             });
-            $('.plan .delete', el).on('click', function () {
+            $('.deploy', el).on('click', function () {
                 $.ajax({
-                    method: 'DELETE',
-                    url: '/apis/v/hub/plan',
+                    method: 'POST',
+                    url: '/apis/v/apps/' + $(this).parent().data('id') + '/deploy',
                     headers: {
                         'X-Host': 'hub.serandives.com:4000'
                     },
                     dataType: 'json',
                     success: function (data) {
-                        console.log(data);
+
                     },
                     error: function () {
 
                     }
-                });
-            });
-            $('.drones', el).on('click', function () {
-                redirect('/apps/' + $(this).parent().data('id') + '/drones');
-            });
-            $('.details', el).on('click', function () {
-                redirect('/apps/' + $(this).parent().data('id'));
-            });
-            $('.restart', el).on('click', function () {
-                serand.emit('hub', 'app restart', {
-                    id: $(this).parent().data('id')
-                });
-            });
-            $('.deploy', el).on('click', function () {
-                serand.emit('hub', 'app deploy', {
-                    id: $(this).parent().data('id')
                 });
             });
             $('.delete', el).on('click', function () {
@@ -182,7 +164,7 @@ var render = function (action, sandbox, fn, options, next) {
 
 var listMenu = [
     {
-        title: 'Domains',
+        title: 'Apps',
         url: '/apps',
         action: 'list'
     },
