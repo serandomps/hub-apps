@@ -68,6 +68,23 @@ var add = function (options, parent, done) {
             return;
         }
         var el = $(out);
+        $.ajax({
+            url: '/apis/v/domains',
+            headers: {
+                'X-Host': 'hub.serandives.com:4000'
+            },
+            dataType: 'json',
+            success: function (data) {
+                var html = '';
+                data.forEach(function (domain) {
+                    html += '<option value="' + domain.id + '">' + domain.name + '</option>';
+                });
+                $('.balancers', el).html(html);
+            },
+            error: function () {
+                done(true);
+            }
+        });
         $('.add', el).click(function () {
             $.ajax({
                 method: 'POST',
